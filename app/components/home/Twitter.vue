@@ -6,7 +6,7 @@ const { twitter } = useAppConfig()
 </script>
 
 <template>
-  <a
+  <!-- <a
     :href="twitter"
     target="_blank"
     title="X(Twitter)"
@@ -17,7 +17,7 @@ const { twitter } = useAppConfig()
       orientation="vertical"
       class="h-4"
     />
-    <!-- <span>{{ $t('home.twitter.follow') }}</span>
-    <ArrowRight class="w-4 h-4" /> -->
-  </a>
+    <span>{{ $t('home.twitter.follow') }}</span>
+    <ArrowRight class="w-4 h-4" />
+  </a> -->
 </template>
