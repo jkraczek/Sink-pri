@@ -17,7 +17,7 @@ const { twitter } = useAppConfig()
       orientation="vertical"
       class="h-4"
     />
-    <span>{{ $t('home.twitter.follow') }}</span>
-    <ArrowRight class="w-4 h-4" />
+    <!-- <span>{{ $t('home.twitter.follow') }}</span>
+    <ArrowRight class="w-4 h-4" /> -->
   </a>
 </template>
