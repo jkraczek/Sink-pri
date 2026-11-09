@@ -315,6 +315,15 @@ export async function d1UpdateLink(event: H3Event, link: Link, expected?: Expect
   return { updated: updated.length > 0, effectiveExpiresAt: values.effectiveExpiresAt }
 }
 
+export async function d1SetLinkOwner(event: H3Event, slug: string, ownerEmail: string | null): Promise<boolean> {
+  const db = getDatabase(event)
+  const updated = await db.update(links)
+    .set({ ownerEmail })
+    .where(eq(links.slug, slug))
+    .returning({ slug: links.slug })
+  return updated.length > 0
+}
+
 export async function d1DeleteLink(event: H3Event, slug: string): Promise<void> {
   const db = getDatabase(event)
   const now = Math.floor(Date.now() / 1000)

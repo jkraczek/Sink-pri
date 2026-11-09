@@ -35,7 +35,14 @@
     "expired": "已過期",
     "unsafe": "不安全連結",
     "owner": {
-      "unassigned": "未分配"
+      "unassigned": "未分配",
+      "reassign": "重新指派擁有者",
+      "reassign_description": "將此連結指派給其他擁有者,或留空以取消指派。",
+      "email_label": "擁有者電子郵件",
+      "email_placeholder": "owner{'@'}example.com",
+      "clear": "取消指派",
+      "reassign_success": "擁有者已更新",
+      "reassign_failed": "更新擁有者失敗"
     },
     "filters": {
       "aria_label": "連結篩選",

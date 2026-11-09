@@ -198,3 +198,72 @@ describe('link ownership: analytics scoping', () => {
     expect(response.status).toBe(404)
   })
 })
+
+describe('link ownership: reassign', () => {
+  it('403s when a non-admin attempts to reassign an owner', async () => {
+    const link = await createLinkAsUser(ALICE)
+    const response = await postJsonAsUser('/api/link/owner', ALICE, { slug: link.slug, ownerEmail: BOB })
+    expect(response.status).toBe(403)
+
+    const stored = await getD1Link(link.slug)
+    expect(stored?.ownerEmail).toBe(ALICE)
+  })
+
+  it('404s when admin reassigns a non-existent link', async () => {
+    const response = await postJson('/api/link/owner', { slug: 'does-not-exist', ownerEmail: BOB })
+    expect(response.status).toBe(404)
+  })
+
+  it('lets admin reassign a link to a different owner', async () => {
+    const link = await createLinkAsUser(ALICE)
+    const response = await postJson('/api/link/owner', { slug: link.slug, ownerEmail: BOB })
+    expect(response.status).toBe(200)
+
+    const stored = await getD1Link(link.slug)
+    expect(stored?.ownerEmail).toBe(BOB)
+
+    const aliceView = await fetchAsUser(`/api/link/query?slug=${link.slug}`, ALICE)
+    expect(aliceView.status).toBe(404)
+    const bobView = await fetchAsUser(`/api/link/query?slug=${link.slug}`, BOB)
+    expect(bobView.status).toBe(200)
+  })
+
+  it('lets admin unassign a link by passing ownerEmail: null', async () => {
+    const link = await createLinkAsUser(ALICE)
+    const response = await postJson('/api/link/owner', { slug: link.slug, ownerEmail: null })
+    expect(response.status).toBe(200)
+
+    const stored = await getD1Link(link.slug)
+    expect(stored?.ownerEmail).toBeNull()
+
+    const aliceView = await fetchAsUser(`/api/link/query?slug=${link.slug}`, ALICE)
+    expect(aliceView.status).toBe(404)
+  })
+
+  it('lets admin assign an unassigned (pre-migration) link to an owner', async () => {
+    const { slug } = await insertUnassignedLink()
+    const response = await postJson('/api/link/owner', { slug, ownerEmail: ALICE })
+    expect(response.status).toBe(200)
+
+    const aliceView = await fetchAsUser(`/api/link/query?slug=${slug}`, ALICE)
+    expect(aliceView.status).toBe(200)
+  })
+
+  it('normalizes the owner email to lowercase', async () => {
+    const link = await createLinkAsUser(ALICE)
+    const response = await postJson('/api/link/owner', { slug: link.slug, ownerEmail: 'BOB@EXAMPLE.COM' })
+    expect(response.status).toBe(200)
+
+    const stored = await getD1Link(link.slug)
+    expect(stored?.ownerEmail).toBe(BOB)
+  })
+
+  it('rejects an invalid owner email', async () => {
+    const link = await createLinkAsUser(ALICE)
+    const response = await postJson('/api/link/owner', { slug: link.slug, ownerEmail: 'not-an-email' })
+    expect(response.status).toBe(400)
+
+    const stored = await getD1Link(link.slug)
+    expect(stored?.ownerEmail).toBe(ALICE)
+  })
+})

@@ -35,7 +35,14 @@
     "expired": "Expirado",
     "unsafe": "Link não seguro",
     "owner": {
-      "unassigned": "Não atribuído"
+      "unassigned": "Não atribuído",
+      "reassign": "Reatribuir Proprietário",
+      "reassign_description": "Atribua este link a outro proprietário ou deixe em branco para o tornar não atribuído.",
+      "email_label": "E-mail do proprietário",
+      "email_placeholder": "owner{'@'}example.com",
+      "clear": "Remover atribuição",
+      "reassign_success": "Proprietário atualizado",
+      "reassign_failed": "Falha ao atualizar o proprietário"
     },
     "filters": {
       "aria_label": "Filtros de links",

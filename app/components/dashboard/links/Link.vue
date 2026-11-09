@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { ComponentPublicInstance } from 'vue'
 import type { DashboardLink } from '@/types/dashboard-links'
-import { CalendarPlus2, Copy, CopyCheck, Ellipsis, Eraser, Flame, Hourglass, Link as LinkIcon, MousePointerClick, QrCode, ShieldAlert, SquarePen, Users } from '@lucide/vue'
+import { CalendarPlus2, Copy, CopyCheck, Ellipsis, Eraser, Flame, Hourglass, Link as LinkIcon, MousePointerClick, QrCode, ShieldAlert, SquarePen, UserCog, Users } from '@lucide/vue'
 import { useClipboard, useMediaQuery } from '@vueuse/core'
 import { parseURL } from 'ufo'
 import { toast } from 'vue-sonner'
@@ -21,6 +21,7 @@ const editPopoverOpen = shallowRef(false)
 const qrDialogOpen = shallowRef(false)
 const editDialogOpen = shallowRef(false)
 const deleteDialogOpen = shallowRef(false)
+const reassignOwnerDialogOpen = shallowRef(false)
 const actionsTriggerRef = useTemplateRef<ComponentPublicInstance>('actionsTrigger')
 const isDesktop = useMediaQuery('(min-width: 640px)')
 
@@ -42,8 +43,14 @@ async function openDeleteDialog() {
   deleteDialogOpen.value = true
 }
 
+async function openReassignOwnerDialog() {
+  editPopoverOpen.value = false
+  await nextTick()
+  reassignOwnerDialogOpen.value = true
+}
+
 function handlePopoverCloseAutoFocus(event: Event) {
-  if (qrDialogOpen.value || editDialogOpen.value || deleteDialogOpen.value)
+  if (qrDialogOpen.value || editDialogOpen.value || deleteDialogOpen.value || reassignOwnerDialogOpen.value)
     event.preventDefault()
 }
 
@@ -284,6 +291,14 @@ function copyLink() {
                 {{ $t('common.edit') }}
               </DropdownMenuItem>
 
+              <DropdownMenuItem
+                v-if="isAdmin"
+                @select.prevent="openReassignOwnerDialog"
+              >
+                <UserCog aria-hidden="true" />
+                {{ $t('links.owner.reassign') }}
+              </DropdownMenuItem>
+
               <DropdownMenuSeparator />
 
               <DropdownMenuItem
@@ -430,6 +445,12 @@ function copyLink() {
     />
     <DashboardLinksDelete
       v-model:open="deleteDialogOpen"
+      :link="link"
+      @close-auto-focus="handleDialogCloseAutoFocus"
+    />
+    <DashboardLinksReassignOwner
+      v-if="isAdmin"
+      v-model:open="reassignOwnerDialogOpen"
       :link="link"
       @close-auto-focus="handleDialogCloseAutoFocus"
     />

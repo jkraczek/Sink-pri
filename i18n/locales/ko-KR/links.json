@@ -35,7 +35,14 @@
     "expired": "만료됨",
     "unsafe": "안전하지 않은 링크",
     "owner": {
-      "unassigned": "미할당"
+      "unassigned": "미할당",
+      "reassign": "소유자 재지정",
+      "reassign_description": "이 링크를 다른 소유자에게 할당하거나, 비워두면 할당이 해제됩니다.",
+      "email_label": "소유자 이메일",
+      "email_placeholder": "owner{'@'}example.com",
+      "clear": "할당 해제",
+      "reassign_success": "소유자가 업데이트되었습니다",
+      "reassign_failed": "소유자 업데이트에 실패했습니다"
     },
     "filters": {
       "aria_label": "링크 필터",

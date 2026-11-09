@@ -18,6 +18,7 @@ import {
   d1ListOwners,
   d1ListTags,
   d1SearchLinks,
+  d1SetLinkOwner,
   d1UpdateLink,
 } from '../services/link-store/d1'
 import { deleteLinkCache, isActiveLinkExpiration, putLinkCache, readLegacyKvLink } from '../services/link-store/kv'
@@ -140,6 +141,10 @@ export async function updateLink(event: H3Event, link: Link, expected?: Expected
     return false
   await writeThroughCache(event, link, result.effectiveExpiresAt)
   return true
+}
+
+export async function setLinkOwner(event: H3Event, slug: string, ownerEmail: string | null): Promise<boolean> {
+  return await d1SetLinkOwner(event, slug, ownerEmail)
 }
 
 export async function deleteLink(event: H3Event, slug: string): Promise<void> {

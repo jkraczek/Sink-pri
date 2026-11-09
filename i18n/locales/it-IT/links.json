@@ -35,7 +35,14 @@
     "expired": "Scaduto",
     "unsafe": "Link non sicuro",
     "owner": {
-      "unassigned": "Non assegnato"
+      "unassigned": "Non assegnato",
+      "reassign": "Riassegna proprietario",
+      "reassign_description": "Assegna questo link a un altro proprietario, oppure lascia vuoto per renderlo non assegnato.",
+      "email_label": "Email del proprietario",
+      "email_placeholder": "owner{'@'}example.com",
+      "clear": "Rimuovi assegnazione",
+      "reassign_success": "Proprietario aggiornato",
+      "reassign_failed": "Impossibile aggiornare il proprietario"
     },
     "filters": {
       "aria_label": "Filtri dei link",
