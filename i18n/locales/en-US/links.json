@@ -35,7 +35,14 @@
     "expired": "Expired",
     "unsafe": "Unsafe link",
     "owner": {
-      "unassigned": "Unassigned"
+      "unassigned": "Unassigned",
+      "reassign": "Reassign Owner",
+      "reassign_description": "Assign this link to a different owner, or leave it empty to unassign it.",
+      "email_label": "Owner email",
+      "email_placeholder": "owner{'@'}example.com",
+      "clear": "Unassign",
+      "reassign_success": "Owner updated",
+      "reassign_failed": "Failed to update owner"
     },
     "filters": {
       "aria_label": "Link filters",

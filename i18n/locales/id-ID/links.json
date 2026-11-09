@@ -35,7 +35,14 @@
     "expired": "Kedaluwarsa",
     "unsafe": "Tautan tidak aman",
     "owner": {
-      "unassigned": "Belum ditugaskan"
+      "unassigned": "Belum ditugaskan",
+      "reassign": "Tetapkan Ulang Pemilik",
+      "reassign_description": "Tetapkan tautan ini ke pemilik lain, atau biarkan kosong untuk membatalkan penetapannya.",
+      "email_label": "Email pemilik",
+      "email_placeholder": "owner{'@'}example.com",
+      "clear": "Batalkan penetapan",
+      "reassign_success": "Pemilik berhasil diperbarui",
+      "reassign_failed": "Gagal memperbarui pemilik"
     },
     "filters": {
       "aria_label": "Filter tautan",

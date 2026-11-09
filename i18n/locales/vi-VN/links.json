@@ -35,7 +35,14 @@
     "expired": "Đã hết hạn",
     "unsafe": "Liên kết không an toàn",
     "owner": {
-      "unassigned": "Chưa được gán"
+      "unassigned": "Chưa được gán",
+      "reassign": "Gán lại chủ sở hữu",
+      "reassign_description": "Gán liên kết này cho chủ sở hữu khác, hoặc để trống để bỏ gán.",
+      "email_label": "Email chủ sở hữu",
+      "email_placeholder": "owner{'@'}example.com",
+      "clear": "Bỏ gán",
+      "reassign_success": "Đã cập nhật chủ sở hữu",
+      "reassign_failed": "Không thể cập nhật chủ sở hữu"
     },
     "filters": {
       "aria_label": "Bộ lọc liên kết",

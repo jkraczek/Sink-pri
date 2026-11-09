@@ -35,7 +35,14 @@
     "expired": "Abgelaufen",
     "unsafe": "Unsicherer Link",
     "owner": {
-      "unassigned": "Nicht zugewiesen"
+      "unassigned": "Nicht zugewiesen",
+      "reassign": "Besitzer neu zuweisen",
+      "reassign_description": "Weisen Sie diesen Link einem anderen Besitzer zu oder lassen Sie das Feld leer, um die Zuweisung aufzuheben.",
+      "email_label": "E-Mail des Besitzers",
+      "email_placeholder": "owner{'@'}example.com",
+      "clear": "Zuweisung aufheben",
+      "reassign_success": "Besitzer aktualisiert",
+      "reassign_failed": "Besitzer konnte nicht aktualisiert werden"
     },
     "filters": {
       "aria_label": "Linkfilter",
