@@ -23,6 +23,7 @@ export default defineNuxtConfig({
     linkCacheTtl: 60,
     redirectWithQuery: false,
     redirectNoStore: false,
+    // Deprecated NUXT_HOME_URL alias; kept so pre-public deployments keep redirecting `/`.
     homeURL: '',
     cfAccountId: '',
     cfApiToken: '',
@@ -35,6 +36,7 @@ export default defineNuxtConfig({
     listQueryLimit: 500,
     disableBotAccessLog: false,
     disableAutoBackup: false,
+    expiredLinkRetentionDays: '',
     notFoundRedirect: '',
     safeBrowsingDoh: '', // Set to DoH URL to enable auto-detection, e.g. https://family.cloudflare-dns.com/dns-query
     webhookUrl: '',
@@ -43,6 +45,9 @@ export default defineNuxtConfig({
       previewMode: '',
       slugDefaultLength: '6',
       kvBatchLimit: '50',
+      maxUrlLength: '16384',
+      homeURL: process.env.NUXT_HOME_URL || '',
+      linkProxyEnabled: false,
     },
   },
   routeRules: {
@@ -110,13 +115,15 @@ export default defineNuxtConfig({
         '@number-flow/vue',
         '@tanstack/vue-form',
         '@unovis/vue',
+        '@vue/devtools-core',
+        '@vue/devtools-kit',
         '@vueuse/core',
         'class-variance-authority',
         'clsx',
         'd3-geo',
         'd3-scale',
         'nanoid',
-        'qr-code-styling',
+        'qr-code-styling', // CJS
         'reka-ui',
         'reka-ui/date',
         'tailwind-merge',

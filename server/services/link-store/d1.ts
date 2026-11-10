@@ -6,7 +6,7 @@ import { and, asc, count, desc, eq, exists, gt, inArray, isNotNull, isNull, lt, 
 import { drizzle } from 'drizzle-orm/d1'
 import { createError } from 'h3'
 import { parseURL, stringifyParsedURL } from 'ufo'
-import { UNASSIGNED_OWNER } from '#shared/types/link'
+import { UNASSIGNED_OWNER } from '../../../shared/types/link'
 import { links, linkTags, linkTombstones, tags } from '../../database/schema'
 import { canAccessLink, getOwnerScope, ownerEmailForNewLink } from '../../utils/ownership'
 import { getExpiration } from '../../utils/time'
@@ -117,6 +117,7 @@ function rowToLink(row: LinkRow): Link {
     'google',
     'cloaking',
     'redirectWithQuery',
+    'proxy',
     'password',
     'unsafe',
     'geo',
@@ -166,6 +167,7 @@ export function buildD1LinkValues(event: H3Event, link: Link, effectiveExpiresAt
     google: link.google ?? null,
     cloaking: link.cloaking ?? null,
     redirectWithQuery: link.redirectWithQuery ?? null,
+    proxy: link.proxy ?? null,
     password: link.password ?? null,
     unsafe: link.unsafe ?? null,
     geo: link.geo ?? null,

@@ -1,6 +1,6 @@
 import type { H3Event } from 'h3'
 import type { RawBuilder } from 'kysely'
-import type { Query } from '#shared/schemas/query'
+import type { FilterQuery, Query } from '#shared/schemas/query'
 import type { BlobsKey } from './access-log'
 import { eq } from 'drizzle-orm'
 import { drizzle } from 'drizzle-orm/d1'
@@ -45,7 +45,7 @@ const UNREACHABLE_LINK_ID = '__no-owned-links__'
  * Admins pass through untouched. Non-admins requesting specific ids they do not own get a 404
  * (existence is not revealed); non-admins requesting no id are auto-scoped to only their own ids.
  */
-export async function scopeAnalyticsQuery(event: H3Event, query: Query): Promise<Query> {
+export async function scopeAnalyticsQuery<T extends FilterQuery>(event: H3Event, query: T): Promise<T> {
   const scope = getOwnerScope(event)
   if (scope.admin)
     return query

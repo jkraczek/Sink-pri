@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { ListLinksQuerySchema } from '#shared/schemas/link'
 
 defineRouteMeta({
   openAPI: {
@@ -51,12 +52,7 @@ defineRouteMeta({
   },
 })
 
-const ListQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(1000).default(20),
-  cursor: z.string().trim().max(1024).optional(),
-  sort: z.enum(['az', 'za', 'newest', 'oldest']).default('newest'),
-  tag: z.string().trim().toLowerCase().min(1).max(32).optional(),
-  status: z.enum(['active', 'expired', 'all']).default('active'),
+const ListQuerySchema = ListLinksQuerySchema.extend({
   owner: z.string().trim().min(1).max(320).optional(),
 })
 
