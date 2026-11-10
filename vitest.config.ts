@@ -30,6 +30,11 @@ function isHandledValidationError(error: unknown): error is HandledValidationErr
 export default defineConfig(async ({ mode }) => ({
   plugins: [
     cloudflareTest({
+      // The AI binding is `remote: true` in wrangler.jsonc so the dashboard/
+      // deployed Worker calls real Workers AI; tests always mock `env.AI`
+      // before use, so skip the remote proxy session (and its Cloudflare
+      // auth requirement) entirely rather than needing credentials just to run.
+      remoteBindings: false,
       wrangler: {
         configPath: './wrangler.jsonc',
       },
