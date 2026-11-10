@@ -10,6 +10,9 @@ export default withNuxt(antfu(
       'app/components/ui/**',
       'app/data/**',
       'public/*.json',
+      // A symlink to AGENTS.md; checks out as plain text on Windows but as a
+      // real symlink on Linux CI, which ESLint's file reader can't lint either way.
+      'CLAUDE.md',
     ],
     rules: {
       '@typescript-eslint/ban-ts-comment': 'off',

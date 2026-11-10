@@ -1,0 +1,77 @@
+name: deploy-staging
+
+# Deploys every PR branch to a separate "sink-staging" Worker with its own D1/KV/R2,
+# so changes can be exercised against a real Cloudflare Worker before merging to
+# master, which auto-deploys to production via Cloudflare's Git integration.
+#
+# Required repository secrets (Settings -> Secrets and variables -> Actions):
+#   CLOUDFLARE_API_TOKEN          Workers Scripts:Edit, D1:Edit, Workers KV Storage:Edit
+#   CLOUDFLARE_ACCOUNT_ID
+#   STAGING_DEPLOY_D1_DATABASE_ID       id of a D1 database dedicated to staging
+#   STAGING_DEPLOY_KV_NAMESPACE_ID      id of a KV namespace dedicated to staging
+# Optional:
+#   STAGING_DEPLOY_D1_DATABASE_NAME     cosmetic only; defaults to "sink"
+#   STAGING_DEPLOY_ANALYTICS_DATASET    set to e.g. "sink-staging" to avoid mixing
+#                                       staging traffic into the production dataset
+#   STAGING_DEPLOY_R2_BUCKET_NAME       omit to deploy without an R2 binding
+#   STAGING_WORKER_NAME                 defaults to "sink-staging" below
+#
+# The staging Worker's own NUXT_SITE_TOKEN (and any other runtime secrets) are not
+# managed here; set them once with `pnpm wrangler secret put <NAME> --name sink-staging`
+# and they persist across redeploys.
+
+on:
+  pull_request:
+    branches: [master]
+    types: [opened, synchronize, reopened]
+
+concurrency:
+  group: deploy-staging-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    # Secrets aren't exposed to pull_request workflows triggered from forks; skip rather than fail noisily.
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    env:
+      WORKER_NAME: sink-staging
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      DEPLOY_D1_DATABASE_ID: ${{ secrets.STAGING_DEPLOY_D1_DATABASE_ID }}
+      DEPLOY_D1_DATABASE_NAME: ${{ secrets.STAGING_DEPLOY_D1_DATABASE_NAME }}
+      DEPLOY_KV_NAMESPACE_ID: ${{ secrets.STAGING_DEPLOY_KV_NAMESPACE_ID }}
+      DEPLOY_ANALYTICS_DATASET: ${{ secrets.STAGING_DEPLOY_ANALYTICS_DATASET }}
+      DEPLOY_R2_BUCKET_NAME: ${{ secrets.STAGING_DEPLOY_R2_BUCKET_NAME }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Generate staging wrangler config
+        run: pnpm deploy:config
+
+      - name: Apply D1 migrations to staging
+        run: pnpm wrangler d1 migrations apply DB --remote --config wrangler.deploy.jsonc
+
+      - name: Deploy to staging Worker
+        run: pnpm wrangler deploy .output/server/index.mjs --assets .output/public --config wrangler.deploy.jsonc --name ${{ env.WORKER_NAME }}
+
+      - name: Summary
+        run: >-
+          echo "Deployed PR number ${{ github.event.pull_request.number }} to
+          https://${{ env.WORKER_NAME }}.<your-subdomain>.workers.dev" >> "$GITHUB_STEP_SUMMARY"
