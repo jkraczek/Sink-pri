@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "cf8ea34e-d7cd-473b-9667-c3c6a5b173ec",
-  "prevId": "b5961265-c240-49ef-8e57-45a430f8a9d3",
+  "id": "be442083-4746-49ae-bc45-9e362afe25fc",
+  "prevId": "c00f3f33-bde2-4367-a0cb-18313fcae66d",
   "tables": {
     "link_migration_runs": {
       "name": "link_migration_runs",
